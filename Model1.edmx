@@ -1,0 +1,320 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="VentaOnlineModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CURSO">
+          <Key>
+            <PropertyRef Name="CODIGOCURSO" />
+          </Key>
+          <Property Name="CODIGOCURSO" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="CODIGODOCENTE" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="NOMBRECURSO" Type="char" MaxLength="50" Nullable="false" />
+          <Property Name="DESCRIPCIONCURSO" Type="char" MaxLength="150" Nullable="false" />
+          <Property Name="TIPOCURSO" Type="char" MaxLength="100" Nullable="false" />
+          <Property Name="COSTOCURSO" Type="float" Nullable="false" />
+          <Property Name="DURACIONCURSO" Type="char" MaxLength="40" Nullable="false" />
+          <Property Name="FECHAINICIOCURSO" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="FECHAFINCURSO" Type="char" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DETALLECOMPRA">
+          <Key>
+            <PropertyRef Name="CODIGOINSCRITO" />
+            <PropertyRef Name="CODIGOCURSO" />
+          </Key>
+          <Property Name="CODIGOINSCRITO" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="CODIGOCURSO" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="FORMAPAGO" Type="char" MaxLength="50" Nullable="false" />
+          <Property Name="TOTALPAGO" Type="float" Nullable="false" />
+          <Property Name="CODIGODETALLECOMPRA" Type="char" MaxLength="40" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DOCENTE">
+          <Key>
+            <PropertyRef Name="CODIGODOCENTE" />
+          </Key>
+          <Property Name="CODIGODOCENTE" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="NOMBRESDOCENTE" Type="char" MaxLength="50" Nullable="false" />
+          <Property Name="APELLIDOSDOCENTE" Type="char" MaxLength="50" Nullable="false" />
+          <Property Name="CEDULADOCENTE" Type="char" MaxLength="50" Nullable="false" />
+          <Property Name="TITULODOCENTE" Type="char" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="INSCRITO">
+          <Key>
+            <PropertyRef Name="CODIGOINSCRITO" />
+          </Key>
+          <Property Name="CODIGOINSCRITO" Type="char" MaxLength="6" Nullable="false" />
+          <Property Name="NOMBRESINSCRITO" Type="char" MaxLength="50" Nullable="false" />
+          <Property Name="APELLIDOSINSCRITO" Type="char" MaxLength="50" Nullable="false" />
+          <Property Name="CEDULAINSCRITO" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="FECHANACIMIENTOINSCRITO" Type="char" MaxLength="10" Nullable="false" />
+          <Property Name="DOMICILIOINSCRITO" Type="char" MaxLength="150" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_CURSO_DICTA_DOCENTE">
+          <End Role="DOCENTE" Type="Self.DOCENTE" Multiplicity="1" />
+          <End Role="CURSO" Type="Self.CURSO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DOCENTE">
+              <PropertyRef Name="CODIGODOCENTE" />
+            </Principal>
+            <Dependent Role="CURSO">
+              <PropertyRef Name="CODIGODOCENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DETALLEC_TIENE_INSCRITO">
+          <End Role="INSCRITO" Type="Self.INSCRITO" Multiplicity="1" />
+          <End Role="DETALLECOMPRA" Type="Self.DETALLECOMPRA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="INSCRITO">
+              <PropertyRef Name="CODIGOINSCRITO" />
+            </Principal>
+            <Dependent Role="DETALLECOMPRA">
+              <PropertyRef Name="CODIGOINSCRITO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DETALLEC_TIENE2_CURSO">
+          <End Role="CURSO" Type="Self.CURSO" Multiplicity="1" />
+          <End Role="DETALLECOMPRA" Type="Self.DETALLECOMPRA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CURSO">
+              <PropertyRef Name="CODIGOCURSO" />
+            </Principal>
+            <Dependent Role="DETALLECOMPRA">
+              <PropertyRef Name="CODIGOCURSO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="PA1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="PA2" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="VentaOnlineModelStoreContainer">
+          <EntitySet Name="CURSO" EntityType="Self.CURSO" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DETALLECOMPRA" EntityType="Self.DETALLECOMPRA" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DOCENTE" EntityType="Self.DOCENTE" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="INSCRITO" EntityType="Self.INSCRITO" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_CURSO_DICTA_DOCENTE" Association="Self.FK_CURSO_DICTA_DOCENTE">
+            <End Role="DOCENTE" EntitySet="DOCENTE" />
+            <End Role="CURSO" EntitySet="CURSO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DETALLEC_TIENE_INSCRITO" Association="Self.FK_DETALLEC_TIENE_INSCRITO">
+            <End Role="INSCRITO" EntitySet="INSCRITO" />
+            <End Role="DETALLECOMPRA" EntitySet="DETALLECOMPRA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DETALLEC_TIENE2_CURSO" Association="Self.FK_DETALLEC_TIENE2_CURSO">
+            <End Role="CURSO" EntitySet="CURSO" />
+            <End Role="DETALLECOMPRA" EntitySet="DETALLECOMPRA" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="VentaOnlineModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="CURSO">
+          <Key>
+            <PropertyRef Name="CODIGOCURSO" />
+          </Key>
+          <Property Name="CODIGOCURSO" Type="String" MaxLength="6" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="CODIGODOCENTE" Type="String" MaxLength="6" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="NOMBRECURSO" Type="String" MaxLength="50" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="DESCRIPCIONCURSO" Type="String" MaxLength="150" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="TIPOCURSO" Type="String" MaxLength="100" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="COSTOCURSO" Type="Double" Nullable="false" />
+          <Property Name="DURACIONCURSO" Type="String" MaxLength="40" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="FECHAINICIOCURSO" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="FECHAFINCURSO" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="DOCENTE" Relationship="Self.FK_CURSO_DICTA_DOCENTE" FromRole="CURSO" ToRole="DOCENTE" />
+          <NavigationProperty Name="DETALLECOMPRA" Relationship="Self.FK_DETALLEC_TIENE2_CURSO" FromRole="CURSO" ToRole="DETALLECOMPRA" />
+        </EntityType>
+        <EntityType Name="DETALLECOMPRA">
+          <Key>
+            <PropertyRef Name="CODIGOINSCRITO" />
+            <PropertyRef Name="CODIGOCURSO" />
+          </Key>
+          <Property Name="CODIGOINSCRITO" Type="String" MaxLength="6" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="CODIGOCURSO" Type="String" MaxLength="6" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="FORMAPAGO" Type="String" MaxLength="50" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="TOTALPAGO" Type="Double" Nullable="false" />
+          <Property Name="CODIGODETALLECOMPRA" Type="String" MaxLength="40" FixedLength="true" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="CURSO" Relationship="Self.FK_DETALLEC_TIENE2_CURSO" FromRole="DETALLECOMPRA" ToRole="CURSO" />
+          <NavigationProperty Name="INSCRITO" Relationship="Self.FK_DETALLEC_TIENE_INSCRITO" FromRole="DETALLECOMPRA" ToRole="INSCRITO" />
+        </EntityType>
+        <EntityType Name="DOCENTE">
+          <Key>
+            <PropertyRef Name="CODIGODOCENTE" />
+          </Key>
+          <Property Name="CODIGODOCENTE" Type="String" MaxLength="6" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="NOMBRESDOCENTE" Type="String" MaxLength="50" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="APELLIDOSDOCENTE" Type="String" MaxLength="50" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="CEDULADOCENTE" Type="String" MaxLength="50" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="TITULODOCENTE" Type="String" MaxLength="50" FixedLength="true" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="CURSO" Relationship="Self.FK_CURSO_DICTA_DOCENTE" FromRole="DOCENTE" ToRole="CURSO" />
+        </EntityType>
+        <EntityType Name="INSCRITO">
+          <Key>
+            <PropertyRef Name="CODIGOINSCRITO" />
+          </Key>
+          <Property Name="CODIGOINSCRITO" Type="String" MaxLength="6" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="NOMBRESINSCRITO" Type="String" MaxLength="50" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="APELLIDOSINSCRITO" Type="String" MaxLength="50" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="CEDULAINSCRITO" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="FECHANACIMIENTOINSCRITO" Type="String" MaxLength="10" FixedLength="true" Unicode="false" Nullable="false" />
+          <Property Name="DOMICILIOINSCRITO" Type="String" MaxLength="150" FixedLength="true" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="DETALLECOMPRA" Relationship="Self.FK_DETALLEC_TIENE_INSCRITO" FromRole="INSCRITO" ToRole="DETALLECOMPRA" />
+        </EntityType>
+        <Association Name="FK_CURSO_DICTA_DOCENTE">
+          <End Role="DOCENTE" Type="Self.DOCENTE" Multiplicity="1" />
+          <End Role="CURSO" Type="Self.CURSO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DOCENTE">
+              <PropertyRef Name="CODIGODOCENTE" />
+            </Principal>
+            <Dependent Role="CURSO">
+              <PropertyRef Name="CODIGODOCENTE" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DETALLEC_TIENE2_CURSO">
+          <End Role="CURSO" Type="Self.CURSO" Multiplicity="1" />
+          <End Role="DETALLECOMPRA" Type="Self.DETALLECOMPRA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CURSO">
+              <PropertyRef Name="CODIGOCURSO" />
+            </Principal>
+            <Dependent Role="DETALLECOMPRA">
+              <PropertyRef Name="CODIGOCURSO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_DETALLEC_TIENE_INSCRITO">
+          <End Role="INSCRITO" Type="Self.INSCRITO" Multiplicity="1" />
+          <End Role="DETALLECOMPRA" Type="Self.DETALLECOMPRA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="INSCRITO">
+              <PropertyRef Name="CODIGOINSCRITO" />
+            </Principal>
+            <Dependent Role="DETALLECOMPRA">
+              <PropertyRef Name="CODIGOINSCRITO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="VentaOnlineEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CURSO" EntityType="Self.CURSO" />
+          <EntitySet Name="DETALLECOMPRA" EntityType="Self.DETALLECOMPRA" />
+          <EntitySet Name="DOCENTE" EntityType="Self.DOCENTE" />
+          <EntitySet Name="INSCRITO" EntityType="Self.INSCRITO" />
+          <AssociationSet Name="FK_CURSO_DICTA_DOCENTE" Association="Self.FK_CURSO_DICTA_DOCENTE">
+            <End Role="DOCENTE" EntitySet="DOCENTE" />
+            <End Role="CURSO" EntitySet="CURSO" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DETALLEC_TIENE2_CURSO" Association="Self.FK_DETALLEC_TIENE2_CURSO">
+            <End Role="CURSO" EntitySet="CURSO" />
+            <End Role="DETALLECOMPRA" EntitySet="DETALLECOMPRA" />
+          </AssociationSet>
+          <AssociationSet Name="FK_DETALLEC_TIENE_INSCRITO" Association="Self.FK_DETALLEC_TIENE_INSCRITO">
+            <End Role="INSCRITO" EntitySet="INSCRITO" />
+            <End Role="DETALLECOMPRA" EntitySet="DETALLECOMPRA" />
+          </AssociationSet>
+          <FunctionImport Name="PA1" ReturnType="Collection(VentaOnlineModel.PA1_Result)" />
+          <FunctionImport Name="PA2" ReturnType="Collection(String)" />
+        </EntityContainer>
+        <ComplexType Name="PA1_Result">
+          <Property Type="String" Name="CODIGODOCENTE" Nullable="false" MaxLength="6" />
+          <Property Type="String" Name="NOMBRESDOCENTE" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="APELLIDOSDOCENTE" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="CEDULADOCENTE" Nullable="false" MaxLength="50" />
+          <Property Type="String" Name="TITULODOCENTE" Nullable="false" MaxLength="50" />
+        </ComplexType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="VentaOnlineModelStoreContainer" CdmEntityContainer="VentaOnlineEntities">
+          <EntitySetMapping Name="CURSO">
+            <EntityTypeMapping TypeName="VentaOnlineModel.CURSO">
+              <MappingFragment StoreEntitySet="CURSO">
+                <ScalarProperty Name="CODIGOCURSO" ColumnName="CODIGOCURSO" />
+                <ScalarProperty Name="CODIGODOCENTE" ColumnName="CODIGODOCENTE" />
+                <ScalarProperty Name="NOMBRECURSO" ColumnName="NOMBRECURSO" />
+                <ScalarProperty Name="DESCRIPCIONCURSO" ColumnName="DESCRIPCIONCURSO" />
+                <ScalarProperty Name="TIPOCURSO" ColumnName="TIPOCURSO" />
+                <ScalarProperty Name="COSTOCURSO" ColumnName="COSTOCURSO" />
+                <ScalarProperty Name="DURACIONCURSO" ColumnName="DURACIONCURSO" />
+                <ScalarProperty Name="FECHAINICIOCURSO" ColumnName="FECHAINICIOCURSO" />
+                <ScalarProperty Name="FECHAFINCURSO" ColumnName="FECHAFINCURSO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DETALLECOMPRA">
+            <EntityTypeMapping TypeName="VentaOnlineModel.DETALLECOMPRA">
+              <MappingFragment StoreEntitySet="DETALLECOMPRA">
+                <ScalarProperty Name="CODIGOINSCRITO" ColumnName="CODIGOINSCRITO" />
+                <ScalarProperty Name="CODIGOCURSO" ColumnName="CODIGOCURSO" />
+                <ScalarProperty Name="FORMAPAGO" ColumnName="FORMAPAGO" />
+                <ScalarProperty Name="TOTALPAGO" ColumnName="TOTALPAGO" />
+                <ScalarProperty Name="CODIGODETALLECOMPRA" ColumnName="CODIGODETALLECOMPRA" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DOCENTE">
+            <EntityTypeMapping TypeName="VentaOnlineModel.DOCENTE">
+              <MappingFragment StoreEntitySet="DOCENTE">
+                <ScalarProperty Name="CODIGODOCENTE" ColumnName="CODIGODOCENTE" />
+                <ScalarProperty Name="NOMBRESDOCENTE" ColumnName="NOMBRESDOCENTE" />
+                <ScalarProperty Name="APELLIDOSDOCENTE" ColumnName="APELLIDOSDOCENTE" />
+                <ScalarProperty Name="CEDULADOCENTE" ColumnName="CEDULADOCENTE" />
+                <ScalarProperty Name="TITULODOCENTE" ColumnName="TITULODOCENTE" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="INSCRITO">
+            <EntityTypeMapping TypeName="VentaOnlineModel.INSCRITO">
+              <MappingFragment StoreEntitySet="INSCRITO">
+                <ScalarProperty Name="CODIGOINSCRITO" ColumnName="CODIGOINSCRITO" />
+                <ScalarProperty Name="NOMBRESINSCRITO" ColumnName="NOMBRESINSCRITO" />
+                <ScalarProperty Name="APELLIDOSINSCRITO" ColumnName="APELLIDOSINSCRITO" />
+                <ScalarProperty Name="CEDULAINSCRITO" ColumnName="CEDULAINSCRITO" />
+                <ScalarProperty Name="FECHANACIMIENTOINSCRITO" ColumnName="FECHANACIMIENTOINSCRITO" />
+                <ScalarProperty Name="DOMICILIOINSCRITO" ColumnName="DOMICILIOINSCRITO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="PA1" FunctionName="VentaOnlineModel.Store.PA1">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="VentaOnlineModel.PA1_Result">
+                <ScalarProperty Name="CODIGODOCENTE" ColumnName="CODIGODOCENTE" />
+                <ScalarProperty Name="NOMBRESDOCENTE" ColumnName="NOMBRESDOCENTE" />
+                <ScalarProperty Name="APELLIDOSDOCENTE" ColumnName="APELLIDOSDOCENTE" />
+                <ScalarProperty Name="CEDULADOCENTE" ColumnName="CEDULADOCENTE" />
+                <ScalarProperty Name="TITULODOCENTE" ColumnName="TITULODOCENTE" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="PA2" FunctionName="VentaOnlineModel.Store.PA2" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
